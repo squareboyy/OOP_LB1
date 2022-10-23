@@ -1,0 +1,7 @@
+D:\rider\Lb1\Lb1\bin\Debug\Lb1.exe
+D:\rider\Lb1\Lb1\bin\Debug\Lb1.pdb
+D:\rider\Lb1\Lb1\obj\Debug\Lb1.csproj.AssemblyReference.cache
+D:\rider\Lb1\Lb1\obj\Debug\Lb1.csproj.SuggestedBindingRedirects.cache
+D:\rider\Lb1\Lb1\obj\Debug\Lb1.csproj.CoreCompileInputs.cache
+D:\rider\Lb1\Lb1\obj\Debug\Lb1.exe
+D:\rider\Lb1\Lb1\obj\Debug\Lb1.pdb

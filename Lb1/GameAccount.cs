@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Lb1
 {
     public class GameAccount
     {
-        private List<GameInfo> GameInfoList = new List<GameInfo>();
-        
-        private static int gameNumber=100000;
-        public string UserName { get; set;}
+        private List<GameInfo> _gameInfoList = new List<GameInfo>();
+        public string UserName { get;}
         public int GamesCount {get; set;}
+        public int InitialRating { get;}
         public int CurrentRating
         {
-            get
+            get 
             {
-                int rating = 0;
-                foreach (var item in GameInfoList)
+                int rating = InitialRating;
+                foreach (var item in _gameInfoList)
                 {
                     rating += item.Rating;
                     if (rating < 1)
@@ -27,76 +25,55 @@ namespace Lb1
                 return rating;
             }
         }
+        
         public GameAccount(string name, int rating)
         {
             UserName = name;
-            var initialRating = new GameInfo(0, rating, null, null);
-            GameInfoList.Add(initialRating);
+            InitialRating = rating;
         }
 
-        public void WinGame(int rating, string opponetName)
+        public void WinGame(int rating, GameAccount opponetName)
         {
             if (rating < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(rating), "The rating for which they are playing must be positive");
             }
-            var win = new GameInfo(++gameNumber, rating, "Win", opponetName);
-            GameInfoList.Add(win);
+          
+            var win = new GameInfo(rating, "Win", opponetName.UserName);
+            var lose = new GameInfo(-rating, "Lose", UserName, -1);
+            _gameInfoList.Add(win);
+            opponetName._gameInfoList.Add(lose);
             GamesCount++;
-        }
+            opponetName.GamesCount = GamesCount;
+        } 
 
-        public void LoseGame(int rating, string opponetName)
+        public void LoseGame(int rating, GameAccount opponetName)
         {
             if (rating < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(rating), "The rating for which they are playing must be positive");
             }
-            var lose = new GameInfo(++gameNumber, -rating,"Lose", opponetName);
-            GameInfoList.Add(lose);
+            var lose = new GameInfo(-rating,"Lose", opponetName.UserName);
+            var win = new GameInfo(rating, "Win", UserName, -1);
+            _gameInfoList.Add(lose);
+            opponetName._gameInfoList.Add(win);
             GamesCount++;
+            opponetName.GamesCount = GamesCount;
         }
-
-        public void DuoGame(string player, int playerRating, string opponent, int opponentRating, int countGames)
+        
+        public void RandomGame(GameAccount opponent, int countGames)
         {
             Random rnd = new Random();
-            int [] x = new int[countGames];
-            int [] random = new int[countGames];
             for (int i = 0; i < countGames; i++)
             {
                 int randomNumber = rnd.Next(1, 11);
                 if (randomNumber < 5)
                 {
-                    x[i] = 0;
-                    random[i] = randomNumber;
-                    WinGame(randomNumber,opponent); 
+                    WinGame(randomNumber, opponent);
                 }
                 else
                 {
-                    x[i] = 1;
-                    random[i] = randomNumber;
                     LoseGame(randomNumber, opponent);
-                }
-            }
-            UserName = player;
-            Console.WriteLine(GetStats());
-            
-            GameInfoList.Clear();
-            GamesCount = 0;
-            gameNumber = 100000;
-            
-            UserName = opponent;
-            var initialDuoRating2 = new GameInfo(0, opponentRating, null, null);
-            GameInfoList.Add(initialDuoRating2);
-            
-            for (int i = 0; i < x.Length; i++)
-            {
-                if (x[i] == 0)
-                {
-                    LoseGame(random[i], player); 
-                }
-                else
-                {
-                    WinGame(random[i], player);  
                 }
             }
             Console.WriteLine(GetStats());
@@ -105,31 +82,20 @@ namespace Lb1
         public string GetStats()
         {
             var report = new System.Text.StringBuilder();
-            int initialRating = 0;
+
+            report.Append("\tStatistics of the player:");
+            report.Append($"\t{UserName}"+"\t\t\t|\n");
             
-              foreach (var item in GameInfoList)
-              {
-                  initialRating = item.Rating;
-                  if (initialRating <= 0)
-                  {
-                      initialRating = 1;
-                  }
-                  break;
-              }
-              
-            report.AppendLine("\tName\t\tInitial rating\t\tPlayed games");
-            report.AppendLine($"\t{UserName}\t\t\t{initialRating}\t\t{GamesCount}\n");
-            report.AppendLine("\tId game\t\tOpponent\tResult\t\tPoints\t\tRating after the match");
+            report.AppendLine("\tInitial rating\tPlayed games\tCurrent rating"+"\t\t|"); 
+            report.AppendLine($"\t{InitialRating}\t\t{GamesCount}\t\t{CurrentRating}"+"\t\t\t|");
             
-            foreach (var item in GameInfoList.Skip(1)) 
+            report.AppendLine("\t\t\tHistory of games"+"\t\t\t|");
+            report.AppendLine("\tId game\t\tOpponent\tResult\t\tPoints"+"\t|");
+            foreach (var item in _gameInfoList)
             {
-                initialRating += item.Rating;
-                if (initialRating < 1)
-                {
-                    initialRating = 1;
-                }
-                report.AppendLine($"\t{item.Id}\t\t{item.Name}\t\t{item.Result}\t\t{Math.Abs(item.Rating)}\t\t\t{initialRating}");
+                report.AppendLine($"\t{item.Id}\t\t{item.Name}\t\t{item.Result}\t\t{Math.Abs(item.Rating)}"+"\t|");
             }
+
             return report.ToString();
         }
     }

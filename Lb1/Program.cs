@@ -2,28 +2,34 @@
 
 namespace Lb1
 {
-     class Game
+    static class Game
     {
         public static void Main(string[] args)
         {
-             Console.WriteLine("\t\t-------------------------DuoGame--------------------------------------------------");
-             var nikita = new GameAccount("Nikita", 2);
-             nikita.DuoGame("Nikita", 2, "Vlad", 5, 5);
+            var nik = new GameAccount("square", 15);
+            var vlad = new GameAccount("karkush", 10);
             
-             Console.WriteLine("\t\t----------------------------------------------------------------------------------");
-             var oleg = new GameAccount("Oleg", 2);
-             oleg.LoseGame(5, "Roma");
-             oleg.WinGame(5, "Roma");
-             oleg.WinGame(15, "Roma");
-             Console.WriteLine(oleg.GetStats());
- 
-             Console.WriteLine("\t\t----------------------------------------------------------------------------------");
-             
-             var vlad = new GameAccount("Vlad", 3);
-             vlad.WinGame(13, "Anton");
-             vlad.LoseGame(2, "Anton");
-             vlad.WinGame(15, "Anton");
-             Console.WriteLine(vlad.GetStats());
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\t\tСтатистика пiсля методу RandomGame");
+            
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
+            
+            nik.RandomGame(vlad,5);
+            Console.WriteLine(vlad.GetStats());
+            
+            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\tСтатистика гравцiв пiсля ще декiлькох iмiтацiй iгор");
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
+            
+            vlad.LoseGame(15, nik);
+            nik.WinGame(5, vlad);
+            nik.LoseGame(3, vlad);
+            vlad.WinGame(7, nik);
+            Console.WriteLine(nik.GetStats());
+            Console.WriteLine(vlad.GetStats());
         }
     }
 }

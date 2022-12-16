@@ -39,8 +39,9 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="GameAccount.cs" />
-        <Compile Include="GameInfo.cs" />
+        <Compile Include="GameImplementation\Game.cs" />
+        <Compile Include="GameImplementation\GameAccount.cs" />
+        <Compile Include="GameImplementation\GameInfo.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>

@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Lb1
+namespace Lb1.GameImplementation
 {
     public class GameAccount
     {
-        private List<GameInfo> _gameInfoList = new List<GameInfo>();
-        public string UserName { get;}
-        public int GamesCount {get; set;}
-        public int InitialRating { get;}
-        public int CurrentRating
+        private readonly List<GameInfo> _gameInfoList = new List<GameInfo>();
+        private string UserName {get;}
+        private int GamesCount {get; set;}
+        private int InitialRating {get;}
+
+        private int CurrentRating
         {
             get 
             {
@@ -32,53 +33,27 @@ namespace Lb1
             InitialRating = rating;
         }
 
-        public void WinGame(int rating, GameAccount opponetName)
+        public void WinGame(int rating, int id, GameAccount opponetName)
         {
             if (rating < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(rating), "The rating for which they are playing must be positive");
             }
-          
-            var win = new GameInfo(rating, "Win", opponetName.UserName);
-            var lose = new GameInfo(-rating, "Lose", UserName, -1);
+            var win = new GameInfo(rating, "Win", opponetName.UserName, id);
             _gameInfoList.Add(win);
-            opponetName._gameInfoList.Add(lose);
             GamesCount++;
-            opponetName.GamesCount = GamesCount;
         } 
 
-        public void LoseGame(int rating, GameAccount opponetName)
+        public void LoseGame(int rating, int id, GameAccount opponetName)
         {
             if (rating < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(rating), "The rating for which they are playing must be positive");
             }
-            var lose = new GameInfo(-rating,"Lose", opponetName.UserName);
-            var win = new GameInfo(rating, "Win", UserName, -1);
+            var lose = new GameInfo(-rating,"Lose", opponetName.UserName, id);
             _gameInfoList.Add(lose);
-            opponetName._gameInfoList.Add(win);
             GamesCount++;
-            opponetName.GamesCount = GamesCount;
         }
-        
-        public void RandomGame(GameAccount opponent, int countGames)
-        {
-            Random rnd = new Random();
-            for (int i = 0; i < countGames; i++)
-            {
-                int randomNumber = rnd.Next(1, 11);
-                if (randomNumber < 5)
-                {
-                    WinGame(randomNumber, opponent);
-                }
-                else
-                {
-                    LoseGame(randomNumber, opponent);
-                }
-            }
-            Console.WriteLine(GetStats());
-        }
-
         public string GetStats()
         {
             var report = new System.Text.StringBuilder();

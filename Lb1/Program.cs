@@ -1,35 +1,29 @@
 ﻿using System;
+using Lb1.GameImplementation;
 
 namespace Lb1
 {
-    static class Game
+    internal static class Program 
     {
         public static void Main(string[] args)
         {
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
+            
             var nik = new GameAccount("square", 15);
             var vlad = new GameAccount("karkush", 10);
+            var roma = new GameAccount("zadr0t",5);
             
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("\t\tСтатистика пiсля методу RandomGame");
-            
-            Console.BackgroundColor = ConsoleColor.White;
-            Console.ForegroundColor = ConsoleColor.Black;
-            
-            nik.RandomGame(vlad,5);
-            Console.WriteLine(vlad.GetStats());
-            
-            Console.ResetColor();
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("\tСтатистика гравцiв пiсля ще декiлькох iмiтацiй iгор");
-            Console.BackgroundColor = ConsoleColor.White;
-            Console.ForegroundColor = ConsoleColor.Black;
-            
-            vlad.LoseGame(15, nik);
-            nik.WinGame(5, vlad);
-            nik.LoseGame(3, vlad);
-            vlad.WinGame(7, nik);
+            var session1 = new Game(nik, vlad);
+            var session2 = new Game(nik, roma);
+
+            session1.SimulationGame(4);
+            session1.SimulationGame();
+            session2.SimulationGame();
+      
             Console.WriteLine(nik.GetStats());
             Console.WriteLine(vlad.GetStats());
+            Console.WriteLine(roma.GetStats());
         }
     }
 }
